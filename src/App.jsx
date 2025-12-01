@@ -6,8 +6,10 @@ import Register from "./Pages/Register";
 import CheckAuth from "./components/common/CheckAuth";
 import AuthLayout from "./components/Auth/layout";
 import { Navbar } from "./components/common/Navbar";
+import { useSelector } from "react-redux";
 
 function App() {
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
   return (
     <div className="text-black">
       <Navbar />
@@ -15,7 +17,7 @@ function App() {
         <Route element={<Landing />} path="/" />
         <Route
           element={
-            <CheckAuth>
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
               <AuthLayout />
             </CheckAuth>
           }
