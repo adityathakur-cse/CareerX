@@ -38,11 +38,12 @@ const Register = () => {
     e.preventDefault();
     dispatch(RegisterUser(formData)).then((response) => {
       if (response?.payload?.success) {
-        navigate("/auth/login ");
+        navigate("/auth/login");
         toast.success(response?.payload?.message);
       }
     });
   }
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Role Selection */}

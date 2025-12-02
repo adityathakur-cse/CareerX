@@ -1,9 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { LoginUser } from "@/Store/Auth-Slice/authSlice";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 const initialState = {
   email: "",
@@ -13,9 +16,15 @@ const initialState = {
 export const Login = () => {
   const [formData, setFormData] = useState(initialState);
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(formData);
+    dispatch(LoginUser(formData)).then((response) => {
+      console.log(response);
+      if (response?.payload?.success) {
+        toast.success("Logged In");
+      }
+    });
   }
   return (
     <form onSubmit={handleSubmit} className="space-y-6">

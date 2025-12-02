@@ -1,12 +1,14 @@
 import { Briefcase } from "lucide-react";
 import React from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import { Navbar } from "../common/Navbar";
 
 const AuthLayout = () => {
   const location = useLocation();
   const isLoginPage = location.pathname.includes("login");
   return (
     <div className="min-h-screen bg-background">
+      <Navbar />
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-12">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
