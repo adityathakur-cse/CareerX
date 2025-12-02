@@ -31,7 +31,7 @@ const Register = () => {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     ...initialState,
-    role: searchParams.get("role") || "STUDENT",
+    role: searchParams.get("role").toUpperCase() || "STUDENT",
   });
 
   function handleSubmit(e) {
