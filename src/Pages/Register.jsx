@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { RegisterUser } from "@/Store/Auth-Slice/authSlice";
 import {
   Building2,
   Eye,
@@ -12,10 +13,12 @@ import {
   User,
 } from "lucide-react";
 import React, { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
 
 const initialState = {
-  role: "student",
+  role: "STUDENT",
   fullName: "",
   email: "",
   password: "",
@@ -24,13 +27,21 @@ const initialState = {
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     ...initialState,
-    role: searchParams.get("role") || "student",
+    role: searchParams.get("role") || "STUDENT",
   });
 
   function handleSubmit(e) {
     e.preventDefault();
+    dispatch(RegisterUser(formData)).then((response) => {
+      if (response?.payload?.success) {
+        navigate("/auth/login ");
+        toast.success(response?.payload?.message);
+      }
+    });
   }
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -40,10 +51,10 @@ const Register = () => {
         <div className="grid grid-cols-2 gap-3">
           <button
             type="button"
-            onClick={() => setFormData({ ...formData, role: "student" })}
+            onClick={() => setFormData({ ...formData, role: "STUDENT" })}
             className={cn(
               "flex items-center justify-center gap-2 rounded-lg border-2 p-4 transition-all",
-              formData.role === "student"
+              formData.role === "STUDENT"
                 ? "border-primary bg-accent text-accent-foreground"
                 : "border-border bg-background text-muted-foreground hover:border-muted-foreground/50"
             )}
@@ -53,10 +64,10 @@ const Register = () => {
           </button>
           <button
             type="button"
-            onClick={() => setFormData({ ...formData, role: "company" })}
+            onClick={() => setFormData({ ...formData, role: "COMPANY" })}
             className={cn(
               "flex items-center justify-center gap-2 rounded-lg border-2 p-4 transition-all",
-              formData.role === "company"
+              formData.role === "COMPANY"
                 ? "border-primary bg-accent text-accent-foreground"
                 : "border-border bg-background text-muted-foreground hover:border-muted-foreground/50"
             )}
@@ -68,10 +79,10 @@ const Register = () => {
       </div>
       <div className="space-y-2">
         <Label htmlFor="name">
-          {formData.role === "student" ? "Full Name" : "Company Name"}
+          {formData.role === "STUDENT" ? "Full Name" : "Company Name"}
         </Label>
         <div className="relative">
-          {formData.role === "student" ? (
+          {formData.role === "STUDENT" ? (
             <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           ) : (
             <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -79,10 +90,12 @@ const Register = () => {
           <Input
             id="name"
             type="text"
-            placeholder={formData.role === "student" ? "John Doe" : "Acme Inc."}
+            placeholder={formData.role === "STUDENT" ? "John Doe" : "Acme Inc."}
             className="pl-10"
             value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, fullName: e.target.value })
+            }
             required
           />
         </div>
