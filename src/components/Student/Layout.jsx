@@ -19,6 +19,9 @@ import {
   User,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useDispatch } from "react-redux";
+import { toast } from "sonner";
+import { Logout } from "@/Store/Auth-Slice/authSlice";
 
 const studentLinks = [
   { to: "/student/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -31,7 +34,19 @@ const studentLinks = [
 
 export const StudentLayout = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  function handleLogout(e) {
+    e.preventDefault();
+    dispatch(Logout()).then((response) => {
+      console.log(response);
+      if (response?.payload?.success) {
+        toast.success(response?.payload?.message);
+      } else {
+        toast.warning(response?.payload?.message || "Some error occurred");
+      }
+    });
+  }
 
   return (
     <div className="flex max-h-screen w-full">
@@ -75,7 +90,10 @@ export const StudentLayout = () => {
           })}
           <SheetFooter>
             <div className="px-4 pt-4 border-t border-border">
-              <button className="flex cursor-pointer items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors w-full">
+              <button
+                onClick={handleLogout}
+                className="flex cursor-pointer items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors w-full"
+              >
                 <LogOut className="h-5 w-5" />
                 Sign out
               </button>

@@ -24,9 +24,11 @@ const CheckAuth = ({ isAuthenticated, user, children }) => {
       console.log("Hey");
       return <Navigate to={"/student/dashboard"} />;
     } else {
+      console.log("bhj");
       return <Navigate to={"/company/dashboard"} />;
     }
   }
+
   return <>{children}</>;
 };
 

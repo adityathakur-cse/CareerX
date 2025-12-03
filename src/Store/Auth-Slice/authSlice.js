@@ -46,7 +46,7 @@ export const LoginUser = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      rejectWithValue(error.response?.data);
+      return rejectWithValue(error.response?.data);
     }
   }
 );
@@ -63,6 +63,20 @@ export const checkUser = createAsyncThunk(
       );
 
       return response.data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const Logout = createAsyncThunk(
+  "/auth/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        "https://careerx-backend.onrender.com/api/auth/logout"
+      );
+      return response?.data;
     } catch (error) {
       return rejectWithValue(error?.response?.data);
     }
@@ -111,6 +125,17 @@ const authSlice = createSlice({
       })
       .addCase(checkUser.pending, (state) => {
         state.isLoading = true;
+      })
+      .addCase(Logout.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(Logout.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isAuthenticated = false;
+        state.user = null;
+      })
+      .addCase(Logout.rejected, (state) => {
+        state.isLoading = false;
       });
   },
 });

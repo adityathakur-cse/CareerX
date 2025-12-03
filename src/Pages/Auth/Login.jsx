@@ -21,8 +21,13 @@ export const Login = () => {
     e.preventDefault();
     dispatch(LoginUser(formData)).then((response) => {
       console.log(response);
-      if (response?.payload?.success) {
+      if (response?.payload?.success) { 
         toast.success("Logged In");
+      } else {
+        toast.warning(
+          response?.payload?.message ||
+            "Some error occurred. Please try again after some time"
+        );
       }
     });
   }

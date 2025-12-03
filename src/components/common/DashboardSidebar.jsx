@@ -12,6 +12,9 @@ import {
   PlusCircle,
   LogOut,
 } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { toast } from "sonner";
+import { Logout } from "@/Store/Auth-Slice/authSlice";
 
 const studentLinks = [
   { to: "/student/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -33,6 +36,18 @@ const companyLinks = [
 export function DashboardSidebar({ userRole }) {
   const location = useLocation();
   const links = userRole === "STUDENT" ? studentLinks : companyLinks;
+  const dispatch = useDispatch();
+
+  function handleLogout(e) {
+    e.preventDefault();
+    dispatch(Logout()).then((response) => {
+      if (response?.message?.success) {
+        toast.success(response?.message?.message);
+      } else {
+        toast.warning(response?.message?.message || "Some error occurred");
+      }
+    });
+  }
 
   return (
     <aside className="h-screen left-0 top-16 w-64 border-r border-border bg-card hidden lg:block">
@@ -67,7 +82,10 @@ export function DashboardSidebar({ userRole }) {
         </nav>
 
         <div className="px-4 pt-4 border-t border-border">
-          <button className="flex items-center cursor-pointer gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors w-full">
+          <button
+            onClick={handleLogout}
+            className="flex items-center cursor-pointer gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors w-full"
+          >
             <LogOut className="h-5 w-5" />
             Sign out
           </button>
