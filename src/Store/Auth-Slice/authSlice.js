@@ -12,7 +12,7 @@ export const RegisterUser = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        "https://careerx-backend.onrender.com/api/auth/register",
         formData,
         {
           headers: {
@@ -34,7 +34,7 @@ export const LoginUser = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "https://careerx-backend.onrender.com/api/auth/login",
         formData,
         {
           headers: {
@@ -55,9 +55,12 @@ export const checkUser = createAsyncThunk(
   "/auth/check",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("http://localhost:5000/api/auth/check", {
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        "https://careerx-backend.onrender.com/api/auth/check",
+        {
+          withCredentials: true,
+        }
+      );
 
       return response.data;
     } catch (error) {
