@@ -41,10 +41,10 @@ export function DashboardSidebar({ userRole }) {
   function handleLogout(e) {
     e.preventDefault();
     dispatch(Logout()).then((response) => {
-      if (response?.message?.success) {
-        toast.success(response?.message?.message);
+      if (response?.payload?.success) {
+        toast.success(response?.payload?.message);
       } else {
-        toast.warning(response?.message?.message || "Some error occurred");
+        toast.warning(response?.payload?.message || "Some error occurred");
       }
     });
   }
