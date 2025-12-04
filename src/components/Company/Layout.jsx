@@ -17,10 +17,10 @@ import {
   Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import StudentHeader from "../Student/StudentHeader";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import { Logout } from "@/Store/Auth-Slice/authSlice";
+import CompanyHeader from "./CompanyHeader";
 
 const companyLinks = [
   { to: "/company/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -99,11 +99,11 @@ const CompanyLayout = () => {
       </Sheet>
 
       <div className="flex flex-1 flex-col">
-        <StudentHeader
+        <CompanyHeader
           openSidebar={openSidebar}
           setOpenSidebar={setOpenSidebar}
         />
-        <main className="flex-1 flex flex-col bg-muted/40 p-4 md:p-6">
+        <main className="flex-1 flex flex-col overflow-scroll bg-muted/40 p-4 md:p-6">
           <Outlet />
         </main>
       </div>
