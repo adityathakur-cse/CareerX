@@ -12,7 +12,7 @@ export const RegisterUser = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "https://careerx-backend.onrender.com/api/auth/register",
+        "http://localhost:5000/api/auth/register",
         formData,
         {
           headers: {
@@ -34,7 +34,7 @@ export const LoginUser = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "https://careerx-backend.onrender.com/api/auth/login",
+        "http://localhost:5000/api/auth/login",
         formData,
         {
           headers: {
@@ -55,12 +55,9 @@ export const checkUser = createAsyncThunk(
   "/auth/check",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        "https://careerx-backend.onrender.com/api/auth/check",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get("http://localhost:5000/api/auth/check", {
+        withCredentials: true,
+      });
 
       return response.data;
     } catch (error) {
@@ -74,7 +71,10 @@ export const Logout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        "https://careerx-backend.onrender.com/api/auth/logout"
+        "http://localhost:5000/api/auth/logout",
+        {
+          withCredentials: true,
+        }
       );
       return response?.data;
     } catch (error) {
@@ -121,7 +121,7 @@ const authSlice = createSlice({
       .addCase(checkUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isAuthenticated = true;
-        state.user = action.payload.userInfo;
+        state.user = action.payload?.userInfo;
       })
       .addCase(checkUser.pending, (state) => {
         state.isLoading = true;

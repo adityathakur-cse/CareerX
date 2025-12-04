@@ -1,14 +1,23 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import { LoginUser } from "@/Store/Auth-Slice/authSlice";
-import { Eye, EyeOff, Lock, Mail } from "lucide-react";
+import {
+  Building2,
+  Eye,
+  EyeOff,
+  GraduationCap,
+  Lock,
+  Mail,
+} from "lucide-react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 const initialState = {
+  role: "STUDENT",
   email: "",
   password: "",
 };
@@ -21,7 +30,7 @@ export const Login = () => {
     e.preventDefault();
     dispatch(LoginUser(formData)).then((response) => {
       console.log(response);
-      if (response?.payload?.success) { 
+      if (response?.payload?.success) {
         toast.success("Logged In");
       } else {
         toast.warning(
@@ -34,6 +43,37 @@ export const Login = () => {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
+        <div className="mb-6">
+          <Label className="mb-3 block">I am a</Label>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, role: "STUDENT" })}
+              className={cn(
+                "flex items-center justify-center gap-2 rounded-lg border-2 p-4 transition-all",
+                formData.role === "STUDENT"
+                  ? "border-primary bg-accent text-accent-foreground"
+                  : "border-border bg-background text-muted-foreground hover:border-muted-foreground/50"
+              )}
+            >
+              <GraduationCap className="h-5 w-5" />
+              <span className="font-medium">Student</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, role: "COMPANY" })}
+              className={cn(
+                "flex items-center justify-center gap-2 rounded-lg border-2 p-4 transition-all",
+                formData.role === "COMPANY"
+                  ? "border-primary bg-accent text-accent-foreground"
+                  : "border-border bg-background text-muted-foreground hover:border-muted-foreground/50"
+              )}
+            >
+              <Building2 className="h-5 w-5" />
+              <span className="font-medium">Company</span>
+            </button>
+          </div>
+        </div>
         <Label htmlFor="email">Email</Label>
         <div className="relative">
           <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
