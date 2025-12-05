@@ -1,9 +1,8 @@
-import React from 'react'
+import React from "react";
 
 const MyIntern = () => {
-  return (
-    <div>MyIntern</div>
-  )
-}
+  return <div>MyIntern</div>;
+};
 
-export default MyIntern
+export default MyIntern;
+ 
