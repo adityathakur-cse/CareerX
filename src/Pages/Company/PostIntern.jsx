@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { companyPostInternship } from "@/Store/Company-Slice/companySlice";
 import {
   Briefcase,
   Calendar,
@@ -27,7 +28,9 @@ import {
   X,
 } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const initialState = {
   title: "",
@@ -43,8 +46,10 @@ const initialState = {
 
 const PostIntern = () => {
   const [formData, setFormData] = useState(initialState);
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading } = useSelector((state) => state.company);
   const [skillInput, setSkillInput] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -52,7 +57,14 @@ const PostIntern = () => {
   };
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(formData);
+    dispatch(companyPostInternship(formData)).then((response) => {
+      if (response?.payload?.success) {
+        navigate("/company/internships");
+        toast.success(response?.payload?.message);
+      } else {
+        toast.error("Couldn't Post Internship. Please try again");
+      }
+    });
   }
   const handleAddSkill = () => {
     if (skillInput.trim() && !formData.skills.includes(skillInput.trim())) {
@@ -251,11 +263,9 @@ const PostIntern = () => {
                       </Label>
                       <Input
                         id="location"
+                        name="location"
                         placeholder="e.g. Mumbai, India"
-                        value={formData.location}
-                        onChange={(e) =>
-                          handleInputChange("location", e.target.value)
-                        }
+                        onChange={handleInputChange}
                       />
                     </div>
                   )}

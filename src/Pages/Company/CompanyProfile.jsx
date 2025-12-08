@@ -68,7 +68,7 @@ const CompanyProfile = () => {
         "http://localhost:5000/api/company/imageupload",
         data
       );
-      if (response || response?.data?.success) {
+      if (response || response.data?.success) {
         setFormData((prevData) => ({
           ...prevData,
           logoUrl: response.data.result.secure_url,
@@ -91,7 +91,7 @@ const CompanyProfile = () => {
       dispatch(companyProfileUpdate(formData)).then((response) => {
         console.log(response);
         if (response?.payload?.success) {
-          toast.success(response?.payload?.message);
+          toast.success(response.payload.message);
         }
       });
     } catch (error) {
