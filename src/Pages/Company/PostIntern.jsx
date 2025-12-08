@@ -59,7 +59,7 @@ const PostIntern = () => {
     e.preventDefault();
     dispatch(companyPostInternship(formData)).then((response) => {
       if (response?.payload?.success) {
-        navigate("/company/internships");
+        navigate("/company/dashboard");
         toast.success(response?.payload?.message);
       } else {
         toast.error("Couldn't Post Internship. Please try again");

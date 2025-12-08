@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,9 +37,6 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteIntern, fetchInterns } from "@/Store/Company-Slice/companySlice";
-import axios from "axios";
-
-// Mock data for internships
 
 const MyIntern = () => {
   const { Internships, isLoading } = useSelector((state) => state.company);
@@ -47,10 +44,6 @@ const MyIntern = () => {
   const [selectedInternship, setSelectedInternship] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchInterns());
-  }, []);
 
   const handleDelete = () => {
     if (selectedInternship) {
