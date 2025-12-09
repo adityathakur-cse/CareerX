@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "sonner";
 import { companyProfileUpdate } from "@/Store/Company-Slice/companySlice";
+import PLoader from "@/components/ui/PLoader";
 
 const CompanyProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -126,29 +127,38 @@ const CompanyProfile = () => {
                           id="image-upload"
                         />
 
-                        <label
-                          htmlFor="image-upload"
-                          className="h-32 w-32 cursor-pointer rounded-lg bg-muted flex items-center justify-center border-2 border-dashed border-border overflow-hidden"
-                        >
-                          {formData.logoUrl ? (
-                            <img
-                              src={formData.logoUrl}
-                              alt="Company logo"
-                              className="h-full w-full object-cover"
-                            />
-                          ) : !file ? (
-                            <Plus className="h-12 w-12 text-muted-foreground" />
-                          ) : (
-                            <label className="h-32 w-32 cursor-pointer rounded-lg bg-muted flex items-center justify-center border-2 border-dashed border-border overflow-hidden">
-                              <div className="flex items-center">
-                                <FileIcon className="w-8 h-8 text-primary mr-2" />
-                              </div>
-                              <p className="text-sm font-medium ">
-                                {file.name}
-                              </p>
-                            </label>
-                          )}
-                        </label>
+                        {!imageLoading ? (
+                          <label
+                            htmlFor="image-upload"
+                            className="h-32 w-32 cursor-pointer rounded-lg bg-muted flex items-center justify-center border-2 border-dashed border-border overflow-hidden"
+                          >
+                            {formData.logoUrl ? (
+                              <img
+                                src={formData.logoUrl}
+                                alt="Company logo"
+                                className="h-full w-full object-cover"
+                              />
+                            ) : !file ? (
+                              <Plus className="h-12 w-12 text-muted-foreground" />
+                            ) : (
+                              <label className="h-32 w-32 cursor-pointer rounded-lg bg-muted flex items-center justify-center border-2 border-dashed border-border overflow-hidden">
+                                <div className="flex items-center">
+                                  <FileIcon className="w-8 h-8 text-primary mr-2" />
+                                </div>
+                                <p className="text-sm font-medium ">
+                                  {file.name}
+                                </p>
+                              </label>
+                            )}
+                          </label>
+                        ) : (
+                          <label
+                            htmlFor="image-upload"
+                            className="h-32 w-32 cursor-pointer rounded-lg bg-muted flex items-center justify-center border-2 border-dashed border-border overflow-hidden"
+                          >
+                            <PLoader />
+                          </label>
+                        )}
                       </div>
                       <p className="text-xs text-muted-foreground text-center">
                         Recommended: 500×500px

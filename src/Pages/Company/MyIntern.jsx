@@ -39,7 +39,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteIntern, fetchInterns } from "@/Store/Company-Slice/companySlice";
 
 const MyIntern = () => {
-  const { Internships, isLoading } = useSelector((state) => state.company);
+  const { Internships } = useSelector((state) => state.company);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedInternship, setSelectedInternship] = useState([]);
   const navigate = useNavigate();
@@ -68,7 +68,7 @@ const MyIntern = () => {
   };
 
   const handleEdit = (id) => {
-    toast.info("Edit functionality - Navigate to edit page");
+    toast.info("Edit functionality - Navigate to edit page", id);
     // TODO: Navigate to edit page with internship ID
   };
 

@@ -22,6 +22,7 @@ import Applicants from "./Pages/Company/Applicants";
 import CompanyProfile from "./Pages/Company/CompanyProfile";
 import CompanyLayout from "./components/Company/Layout";
 import { setProfile } from "./Store/Company-Slice/companySlice";
+import { setStudent } from "./Store/User-Slice/userSlice";
 
 function App() {
   const { isAuthenticated, user, isLoading } = useSelector(
@@ -33,7 +34,11 @@ function App() {
     dispatch(checkUser()).then((response) => {
       console.log(response);
       if (response?.payload?.success) {
-        dispatch(setProfile(response?.payload?.userInfo));
+        if (response?.payload?.userInfo.role === "COMPANY") {
+          dispatch(setProfile(response?.payload?.userInfo));
+        } else {
+          dispatch(setStudent(response?.payload?.userInfo));
+        }
       }
     });
   }, []);

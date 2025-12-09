@@ -24,24 +24,29 @@ import {
   Pencil,
   Upload,
   Trash2,
+  File,
 } from "lucide-react";
 import { FaLinkedinIn, FaXTwitter } from "react-icons/fa6";
 import { LuGithub } from "react-icons/lu";
 import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { profileUpdate } from "@/Store/User-Slice/userSlice";
+import PLoader from "@/components/ui/PLoader";
 
 // Mock user data based on schema
-const mockUserData = {
-  fullName: "John Doe",
-  email: "john.doe@example.com",
-  phone: "+91 9876543210",
-  skills: ["React", "TypeScript", "Node.js", "Tailwind CSS", "MongoDB"],
-  resumeUrl: "",
-  profileImg: "",
-  Socials: [
-    { platform: "LinkedIn", url: "https://linkedin.com/in/johndoe" },
-    { platform: "GitHub", url: "https://github.com/johndoe" },
-  ],
-};
+// const mockUserData = {
+//   fullName: "John Doe",
+//   email: "john.doe@example.com",
+//   phone: "+91 9876543210",
+//   skills: ["React", "TypeScript", "Node.js", "Tailwind CSS", "MongoDB"],
+//   resumeUrl: "",
+//   profileImg: "",
+//   Socials: [
+//     { platform: "LinkedIn", url: "https://linkedin.com/in/johndoe" },
+//     { platform: "GitHub", url: "https://github.com/johndoe" },
+//   ],
+// };
 
 const socialPlatforms = [
   { name: "LinkedIn", icon: FaLinkedinIn },
@@ -51,13 +56,44 @@ const socialPlatforms = [
 ];
 
 export default function Profile() {
+  const { user } = useSelector((state) => state.auth);
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState(mockUserData);
+  const [formData, setFormData] = useState(user);
   const [newSkill, setNewSkill] = useState("");
+  const [fileLoad, setFileLoad] = useState(false);
+  const [imageLoad, setImageLoad] = useState(false);
   const resumeInputRef = useRef(null);
+  const imageInputRef = useRef(null);
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.student);
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleImageUpload = async (e) => {
+    setImageLoad(true);
+    const file = e.target.files?.[0];
+    const data = new FormData();
+    data.append("my_file", file);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/user/profileImg",
+        data
+      );
+      if (response || response.data?.success) {
+        setFormData((prevData) => ({
+          ...prevData,
+          profileImg: response.data.result.secure_url,
+        }));
+      }
+    } catch (error) {
+      toast.error("Image not uploaded");
+      imageInputRef.current.value = null;
+      console.log(error);
+    } finally {
+      setImageLoad(false);
+    }
   };
 
   const handleSocialChange = (index, field, value) => {
@@ -100,19 +136,41 @@ export default function Profile() {
     }));
   };
 
-  const handleResumeUpload = (e) => {
+  const handleResumeUpload = async (e) => {
+    setFileLoad(true);
     const file = e.target.files?.[0];
-    if (file) {
-      // In a real app, you'd upload to a server and get back a URL
-      setFormData((prev) => ({ ...prev, resumeUrl: file.name }));
-      toast.success("Resume uploaded successfully!");
+    const data = new FormData();
+    data.append("my_file", file);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/user/uploadResume",
+        data
+      );
+      console.log(response);
+      if (response?.data?.success) {
+        setFileLoad(false);
+        toast.success("Resume Uploaded Successfully");
+        setFormData((prev) => ({
+          ...prev,
+          resumeUrl: response?.data?.result?.secure_url,
+        }));
+      }
+    } catch (error) {
+      setFileLoad(false);
+      toast.error(error.message);
     }
   };
 
   const handleSave = () => {
-    // Here you would typically make an API call to save the data
-    toast.success("Profile updated successfully!");
-    setIsEditing(false);
+    dispatch(profileUpdate(formData)).then((response) => {
+      console.log(response);
+      if (response?.payload?.success) {
+        toast.success("Profile updated successfully!");
+        setIsEditing(false);
+      } else {
+        toast.error("Some error occurred");
+      }
+    });
   };
 
   const getInitials = (name) => {
@@ -143,8 +201,14 @@ export default function Profile() {
             >
               {isEditing ? (
                 <>
-                  <Save className="h-4 w-4" />
-                  Save Changes
+                  {isLoading ? (
+                    <PLoader />
+                  ) : (
+                    <>
+                      <Save className="h-4 w-4" />
+                      Save Changes
+                    </>
+                  )}
                 </>
               ) : (
                 <>
@@ -163,17 +227,35 @@ export default function Profile() {
                 <CardContent className="pt-6">
                   <div className="flex flex-col items-center">
                     <div className="relative">
+                      <input
+                        type="file"
+                        name="my_file"
+                        ref={imageInputRef}
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
                       <Avatar className="h-28 w-28">
-                        <AvatarImage
-                          src={formData.profileImg}
-                          alt={formData.fullName}
-                        />
-                        <AvatarFallback className="text-2xl bg-primary/10 text-primary">
-                          {getInitials(formData.fullName)}
-                        </AvatarFallback>
+                        {!imageLoad ? (
+                          <>
+                            <AvatarImage
+                              src={formData.profileImg}
+                              alt={formData.fullName}
+                            />
+                            <AvatarFallback className="text-2xl bg-primary/10 text-primary">
+                              {getInitials(formData.fullName)}
+                            </AvatarFallback>
+                          </>
+                        ) : (
+                          <PLoader className="mt-11 ml-10" />
+                        )}
                       </Avatar>
                       {isEditing && (
-                        <button className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors">
+                        <button
+                          onClick={() => {
+                            imageInputRef.current.click();
+                          }}
+                          className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors"
+                        >
                           <Camera className="h-4 w-4" />
                         </button>
                       )}
@@ -200,50 +282,92 @@ export default function Profile() {
                   </CardTitle>
                   <CardDescription>Your uploaded resume</CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <input
-                    type="file"
-                    ref={resumeInputRef}
-                    onChange={handleResumeUpload}
-                    accept=".pdf,.doc,.docx"
-                    className="hidden"
-                  />
-                  {formData.resumeUrl ? (
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-muted">
-                      <div className="flex items-center gap-3">
+                {isEditing ? (
+                  <CardContent>
+                    <input
+                      type="file"
+                      name="my_file"
+                      ref={resumeInputRef}
+                      onChange={handleResumeUpload}
+                      accept=".pdf,.doc,.docx"
+                      className="hidden"
+                    />
+
+                    {formData.resumeUrl ? (
+                      <div className="flex items-center justify-between p-3 rounded-lg bg-muted">
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                            <FileText className="h-5 w-5 text-primary" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-foreground">
+                              File
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              Uploaded
+                            </p>
+                          </div>
+                        </div>
+                        {isEditing && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setFormData((prev) => ({
+                                ...prev,
+                                resumeUrl: "",
+                              }));
+                              resumeInputRef.current.value = null;
+                            }}
+                          >
+                            Remove
+                          </Button>
+                        )}
+                      </div>
+                    ) : (
+                      <Button
+                        variant="outline"
+                        className="w-full gap-2"
+                        onClick={() => resumeInputRef.current?.click()}
+                      >
+                        {!fileLoad ? (
+                          <>
+                            <Upload className="h-4 w-4" />
+                            Upload Resume
+                          </>
+                        ) : (
+                          <PLoader />
+                        )}
+                      </Button>
+                    )}
+                  </CardContent>
+                ) : (
+                  <CardContent>
+                    {formData.resumeUrl ? (
+                      <a
+                        href={formData.resumeUrl}
+                        className="flex items-center gap-3"
+                      >
                         <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
                           <FileText className="h-5 w-5 text-primary" />
                         </div>
                         <div>
                           <p className="text-sm font-medium text-foreground">
-                            {formData.resumeUrl}
+                            File
                           </p>
                           <p className="text-xs text-muted-foreground">
                             Uploaded
                           </p>
                         </div>
+                      </a>
+                    ) : (
+                      <div className="text-sm text-center items-center flex gap-5 text-gray-500">
+                        <File />
+                        No Resume Uploaded
                       </div>
-                      {isEditing && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => resumeInputRef.current?.click()}
-                        >
-                          Replace
-                        </Button>
-                      )}
-                    </div>
-                  ) : (
-                    <Button
-                      variant="outline"
-                      className="w-full gap-2"
-                      onClick={() => resumeInputRef.current?.click()}
-                    >
-                      <Upload className="h-4 w-4" />
-                      Upload Resume
-                    </Button>
-                  )}
-                </CardContent>
+                    )}
+                  </CardContent>
+                )}
               </Card>
             </div>
 
@@ -294,6 +418,7 @@ export default function Profile() {
                         <Input
                           id="email"
                           type="email"
+                          disabled={true}
                           value={formData.email}
                           onChange={(e) =>
                             handleInputChange("email", e.target.value)
