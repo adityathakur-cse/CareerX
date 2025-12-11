@@ -32,6 +32,7 @@ import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { profileUpdate } from "@/Store/Student-Slice/studentSlice";
+import PLoader from "@/components/ui/PLoader";
 
 // Mock user data based on schema
 // const mockUserData = {
