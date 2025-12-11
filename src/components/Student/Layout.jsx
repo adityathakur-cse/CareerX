@@ -107,7 +107,7 @@ export const StudentLayout = () => {
           openSidebar={openSidebar}
           setOpenSidebar={setOpenSidebar}
         />
-        <main className="flex-1 overflow-scroll flex flex-col bg-muted/40 p-4 md:p-6">
+        <main className="flex-1 overflow-scroll flex flex-col bg-muted/40 px-4 md:px-6">
           <Outlet />
         </main>
       </div>

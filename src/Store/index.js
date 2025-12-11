@@ -1,13 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authSlice from "./Auth-Slice/authSlice";
 import companySlice from "./Company-Slice/companySlice";
-import userSlice from "./User-Slice/userSlice";
+import studentSlice from "./Student-Slice/studentSlice";
 
 const store = configureStore({
   reducer: {
     auth: authSlice,
     company: companySlice,
-    student: userSlice,
+    student: studentSlice,
   },
 });
 

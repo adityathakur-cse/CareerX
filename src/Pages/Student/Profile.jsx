@@ -31,8 +31,7 @@ import { LuGithub } from "react-icons/lu";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { profileUpdate } from "@/Store/User-Slice/userSlice";
-import PLoader from "@/components/ui/PLoader";
+import { profileUpdate } from "@/Store/Student-Slice/studentSlice";
 
 // Mock user data based on schema
 // const mockUserData = {
