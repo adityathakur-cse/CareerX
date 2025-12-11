@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { Search, MapPin, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -19,59 +19,44 @@ import {
 import { InternshipCardSkeleton } from "@/components/ui/SkeletonCard";
 import { ChevronDown } from "lucide-react";
 import InternshipListCard from "@/components/ui/InternshipListCard";
-import { internships } from "@/lib/mock";
 import { InternshipDetailSheet } from "@/components/InternshipDetailSheet";
-
-
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearFilters,
+  fetchInternships,
+  selectFilteredInternships,
+  setLocationQuery,
+  setSearchQuery,
+  setSortBy,
+  toggleDuration,
+  toggleInternshipType,
+  toggleStipendRange,
+} from "@/Store/Internship-Slice/internshipSlice";
 
 export default function StudentInternships() {
   const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [locationQuery, setLocationQuery] = useState("");
-
-  const [sortBy, setSortBy] = useState("latest");
   const [selectedInternship, setSelectedInternship] = useState(null);
+  const {
+    filters: {
+      searchQuery,
+      locationQuery,
+      sortBy,
+      internshipTypes,
+      durations,
+      stipendRanges,
+    },
+  } = useSelector((state) => state.internship);
+
   const [sheetOpen, setSheetOpen] = useState(false);
+  const dispatch = useDispatch();
 
-  // Filter states
-  const [internshipTypes, setInternshipTypes] = useState([]);
-  const [durations, setDurations] = useState([]);
-  const [stipendRanges, setStipendRanges] = useState([]);
-
-  // Simulate loading
-  useState(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1500);
-    return () => clearTimeout(timer);
-  });
-
-  const toggleInternshipType = (type) => {
-    setInternshipTypes((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
-    );
-  };
-
-  const toggleDuration = (duration) => {
-    setDurations((prev) =>
-      prev.includes(duration)
-        ? prev.filter((d) => d !== duration)
-        : [...prev, duration]
-    );
-  };
-
-  const toggleStipendRange = (range) => {
-    setStipendRanges((prev) =>
-      prev.includes(range) ? prev.filter((r) => r !== range) : [...prev, range]
-    );
-  };
-
-  const clearFilters = () => {
-    setSearchQuery("");
-    setLocationQuery("");
-    setInternshipTypes([]);
-    setDurations([]);
-    setStipendRanges([]);
-    setSortBy("latest");
-  };
+  useEffect(() => {
+    dispatch(fetchInternships()).then((response) => {
+      if (response?.payload.success) {
+        setIsLoading(false);
+      }
+    });
+  }, []);
 
   const activeFilterCount =
     internshipTypes.length + durations.length + stipendRanges.length;
@@ -104,88 +89,7 @@ export default function StudentInternships() {
     });
   };
 
-  const filteredInternships = useMemo(() => {
-    let result = [...internships];
-
-    // Search filter
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      result = result.filter(
-        (i) =>
-          i.title.toLowerCase().includes(query) ||
-          i.skills.some((s) => s.toLowerCase().includes(query))
-      );
-    }
-
-    // Location filter
-    if (locationQuery) {
-      const query = locationQuery.toLowerCase();
-      result = result.filter(
-        (i) =>
-          (i.location && i.location.toLowerCase().includes(query)) ||
-          i.internshipType.toLowerCase().includes(query)
-      );
-    }
-
-    // Internship type filter
-    if (internshipTypes.length > 0) {
-      result = result.filter((i) => internshipTypes.includes(i.internshipType));
-    }
-
-    // Duration filter
-    if (durations.length > 0) {
-      result = result.filter((i) => {
-        const months = parseInt(i.duration);
-        if (durations.includes("1 month") && months === 1) return true;
-        if (durations.includes("2 months") && months === 2) return true;
-        if (durations.includes("3 months+") && months >= 3) return true;
-        return false;
-      });
-    }
-
-    // Stipend filter
-    if (stipendRanges.length > 0) {
-      result = result.filter((i) => {
-        const stipend = i.stipend;
-        if (stipendRanges.includes("Unpaid") && stipend === 0) return true;
-        if (
-          stipendRanges.includes("1k-5k") &&
-          stipend >= 1000 &&
-          stipend <= 5000
-        )
-          return true;
-        if (
-          stipendRanges.includes("5k-10k") &&
-          stipend > 5000 &&
-          stipend <= 10000
-        )
-          return true;
-        if (stipendRanges.includes("10k+") && stipend > 10000) return true;
-        return false;
-      });
-    }
-
-    // Sort
-    if (sortBy === "latest") {
-      result.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
-    } else if (sortBy === "stipend-high") {
-      result.sort((a, b) => b.stipend - a.stipend);
-    } else if (sortBy === "stipend-low") {
-      result.sort((a, b) => a.stipend - b.stipend);
-    }
-
-    return result;
-  }, [
-    searchQuery,
-    locationQuery,
-    internshipTypes,
-    durations,
-    stipendRanges,
-    sortBy,
-  ]);
+  const filteredInternships = useSelector(selectFilteredInternships);
 
   const handleViewDetails = (internship) => {
     setSelectedInternship(internship);
@@ -204,7 +108,7 @@ export default function StudentInternships() {
               <Input
                 placeholder="Search internships, skills..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => dispatch(setSearchQuery(e.target.value))}
                 className="pl-10"
               />
             </div>
@@ -213,7 +117,7 @@ export default function StudentInternships() {
               <Input
                 placeholder="Remote, Bangalore..."
                 value={locationQuery}
-                onChange={(e) => setLocationQuery(e.target.value)}
+                onChange={(e) => dispatch(setLocationQuery(e.target.value))}
                 className="pl-10"
               />
             </div>
@@ -222,18 +126,10 @@ export default function StudentInternships() {
           {/* Filters Row */}
           <div className="flex flex-wrap items-center gap-2">
             {/* Internship Type Filter */}
-            <DropdownMenu>
+            {/* <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm" className="h-8">
                   Type
-                  {internshipTypes.length > 0 && (
-                    <Badge
-                      variant="secondary"
-                      className="ml-1.5 px-1.5 py-0 text-xs"
-                    >
-                      {internshipTypes.length}
-                    </Badge>
-                  )}
                   <ChevronDown className="ml-1.5 h-3.5 w-3.5" />
                 </Button>
               </DropdownMenuTrigger>
@@ -242,76 +138,66 @@ export default function StudentInternships() {
                   <DropdownMenuCheckboxItem
                     key={type}
                     checked={internshipTypes.includes(type)}
-                    onCheckedChange={() => toggleInternshipType(type)}
+                    onCheckedChange={() => dispatch(toggleInternshipType(type))}
                   >
                     {type}
                   </DropdownMenuCheckboxItem>
                 ))}
               </DropdownMenuContent>
-            </DropdownMenu>
+            </DropdownMenu> */}
+            <Select
+              value={internshipTypes}
+              onValueChange={(value) => dispatch(toggleInternshipType(value))}
+            >
+              <SelectTrigger className="w-[150px] h-8 text-sm">
+                <SelectValue placeholder="Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="onsite">Onsite</SelectItem>
+                <SelectItem value="hybrid">Hybrid</SelectItem>
+                <SelectItem value="remote">Remote</SelectItem>
+              </SelectContent>
+            </Select>
 
             {/* Duration Filter */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="h-8">
-                  Duration
-                  {durations.length > 0 && (
-                    <Badge
-                      variant="secondary"
-                      className="ml-1.5 px-1.5 py-0 text-xs"
-                    >
-                      {durations.length}
-                    </Badge>
-                  )}
-                  <ChevronDown className="ml-1.5 h-3.5 w-3.5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
-                {["1 month", "2 months", "3 months+"].map((duration) => (
-                  <DropdownMenuCheckboxItem
-                    key={duration}
-                    checked={durations.includes(duration)}
-                    onCheckedChange={() => toggleDuration(duration)}
-                  >
-                    {duration}
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
 
-            {/* Stipend Filter */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="h-8">
-                  Stipend
-                  {stipendRanges.length > 0 && (
-                    <Badge
-                      variant="secondary"
-                      className="ml-1.5 px-1.5 py-0 text-xs"
-                    >
-                      {stipendRanges.length}
-                    </Badge>
-                  )}
-                  <ChevronDown className="ml-1.5 h-3.5 w-3.5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
-                {["Unpaid", "1k-5k", "5k-10k", "10k+"].map((range) => (
-                  <DropdownMenuCheckboxItem
-                    key={range}
-                    checked={stipendRanges.includes(range)}
-                    onCheckedChange={() => toggleStipendRange(range)}
-                  >
-                    {range === "Unpaid" ? "Unpaid" : `₹${range}`}
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Select
+              value={durations}
+              onValueChange={(value) => dispatch(toggleDuration(value))}
+            >
+              <SelectTrigger className="w-[150px] h-8 text-sm">
+                <SelectValue placeholder="Duration" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1 month">1 Month</SelectItem>
+                <SelectItem value="2 month">2 Month</SelectItem>
+                <SelectItem value="3 months+">3 Month+</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* Stipend Filter  */}
+            <Select
+              value={stipendRanges}
+              onValueChange={(value) => dispatch(toggleStipendRange(value))}
+            >
+              <SelectTrigger className="w-[150px] h-8 text-sm">
+                <SelectValue placeholder="Stipend" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="unpaid">Unpaid</SelectItem>
+                <SelectItem value="1k-5k">1k-5k</SelectItem>
+                <SelectItem value="5k-10k">5k-10k</SelectItem>
+                <SelectItem value="10k+">10k+</SelectItem>
+              </SelectContent>
+            </Select>
 
             <div className="flex-1" />
 
             {/* Sort */}
-            <Select value={sortBy} onValueChange={setSortBy}>
+            <Select
+              value={sortBy}
+              onValueChange={(value) => dispatch(setSortBy(value))}
+            >
               <SelectTrigger className="w-[150px] h-8 text-sm">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
@@ -329,7 +215,7 @@ export default function StudentInternships() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={clearFilters}
+                onClick={() => dispatch(clearFilters())}
                 className="h-8 text-xs"
               >
                 Clear all
@@ -343,35 +229,7 @@ export default function StudentInternships() {
         <div className="max-w-4xl mx-auto">
           {/* Active Filters */}
           {activeFilterCount > 0 && (
-            <div className="flex flex-wrap gap-2 mb-4">
-              {internshipTypes.map((type) => (
-                <Badge key={type} variant="secondary" className="gap-1">
-                  {type}
-                  <X
-                    className="h-3 w-3 cursor-pointer"
-                    onClick={() => toggleInternshipType(type)}
-                  />
-                </Badge>
-              ))}
-              {durations.map((duration) => (
-                <Badge key={duration} variant="secondary" className="gap-1">
-                  {duration}
-                  <X
-                    className="h-3 w-3 cursor-pointer"
-                    onClick={() => toggleDuration(duration)}
-                  />
-                </Badge>
-              ))}
-              {stipendRanges.map((range) => (
-                <Badge key={range} variant="secondary" className="gap-1">
-                  ₹{range}
-                  <X
-                    className="h-3 w-3 cursor-pointer"
-                    onClick={() => toggleStipendRange(range)}
-                  />
-                </Badge>
-              ))}
-            </div>
+            <div className="flex flex-wrap gap-2 mb-4"></div>
           )}
 
           {/* Results Count */}
