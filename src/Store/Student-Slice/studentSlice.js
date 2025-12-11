@@ -34,7 +34,11 @@ export const profileUpdate = createAsyncThunk(
 const studentSlice = createSlice({
   initialState: initialState,
   name: "studentSlice",
-  reducers: {},
+  reducers: {
+    setStudent: (state, action) => {
+      state.profile = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(profileUpdate.rejected, (state) => {
@@ -49,5 +53,8 @@ const studentSlice = createSlice({
       });
   },
 });
+
+export const { setStudent } = studentSlice.actions;
+
 
 export default studentSlice.reducer;

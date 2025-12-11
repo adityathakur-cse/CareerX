@@ -22,7 +22,7 @@ import Applicants from "./Pages/Company/Applicants";
 import CompanyProfile from "./Pages/Company/CompanyProfile";
 import CompanyLayout from "./components/Company/Layout";
 import { setProfile } from "./Store/Company-Slice/companySlice";
-import { setStudent } from "./Store/User-Slice/userSlice";
+import { setStudent } from "./Store/Student-Slice/studentSlice";
 
 function App() {
   const { isAuthenticated, user, isLoading } = useSelector(

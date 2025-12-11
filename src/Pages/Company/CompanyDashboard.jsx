@@ -269,7 +269,7 @@ export default function CompanyDashboard() {
                   className="px-6 py-4 hover:bg-muted/50 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                       <span className="text-sm font-medium text-primary">
                         {applicant.name
                           .split(" ")
