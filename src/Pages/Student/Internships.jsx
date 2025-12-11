@@ -126,25 +126,7 @@ export default function StudentInternships() {
           {/* Filters Row */}
           <div className="flex flex-wrap items-center gap-2">
             {/* Internship Type Filter */}
-            {/* <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="h-8">
-                  Type
-                  <ChevronDown className="ml-1.5 h-3.5 w-3.5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
-                {["Remote", "On-site", "Hybrid"].map((type) => (
-                  <DropdownMenuCheckboxItem
-                    key={type}
-                    checked={internshipTypes.includes(type)}
-                    onCheckedChange={() => dispatch(toggleInternshipType(type))}
-                  >
-                    {type}
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu> */}
+
             <Select
               value={internshipTypes}
               onValueChange={(value) => dispatch(toggleInternshipType(value))}
