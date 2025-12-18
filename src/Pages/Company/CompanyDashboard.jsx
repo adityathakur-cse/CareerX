@@ -28,7 +28,7 @@ import { fetchInterns } from "@/Store/Company-Slice/companySlice";
 
 const stats = [
   {
-    title: "Active Internships",
+    title: "Active Jobs",
     value: 5,
     icon: Briefcase,
     trend: "+2 this month",
@@ -38,7 +38,7 @@ const stats = [
   },
   {
     title: "Total Applicants",
-    value: 128,
+    value: 12,
     icon: Users,
     trend: "+24 this week",
     trendUp: true,
@@ -47,7 +47,7 @@ const stats = [
   },
   {
     title: "Interviews Scheduled",
-    value: 8,
+    value: 3,
     icon: Calendar,
     trend: "3 this week",
     trendUp: true,
@@ -56,7 +56,7 @@ const stats = [
   },
   {
     title: "Positions Filled",
-    value: 12,
+    value: 10,
     icon: TrendingUp,
     trend: "+4 this month",
     trendUp: true,
@@ -68,32 +68,32 @@ const stats = [
 const recentApplicants = [
   {
     id: "1",
-    name: "John Doe",
+    name: "Rishu",
     role: "Frontend Developer Intern",
     applied: "2 hours ago",
     status: "New",
   },
   {
     id: "2",
-    name: "Jane Smith",
+    name: "Aditya Thakur",
     role: "Backend Developer Intern",
     applied: "5 hours ago",
     status: "Reviewed",
   },
-  {
-    id: "3",
-    name: "Mike Wilson",
-    role: "Frontend Developer Intern",
-    applied: "1 day ago",
-    status: "Shortlisted",
-  },
-  {
-    id: "4",
-    name: "Emily Chen",
-    role: "Data Science Intern",
-    applied: "2 days ago",
-    status: "New",
-  },
+  // {
+  //   id: "3",
+  //   name: "Mike Wilson",
+  //   role: "Frontend Developer Intern",
+  //   applied: "1 day ago",
+  //   status: "Shortlisted",
+  // },
+  // {
+  //   id: "4",
+  //   name: "Emily Chen",
+  //   role: "Data Science Intern",
+  //   applied: "2 days ago",
+  //   status: "New",
+  // },
 ];
 
 export default function CompanyDashboard() {
@@ -118,13 +118,13 @@ export default function CompanyDashboard() {
             Welcome back!
           </h1>
           <p className="text-muted-foreground mt-1">
-            Here's what's happening with your internships.
+            Here's what's happening with your posted jobs.
           </p>
         </div>
         <Button asChild>
           <Link to="/company/post">
             <PlusCircle className="mr-2 h-4 w-4" />
-            Post Internship
+            Post Jobs
           </Link>
         </Button>
       </div>
@@ -161,7 +161,7 @@ export default function CompanyDashboard() {
         <Card className="lg:col-span-2 border-border">
           <CardHeader className="flex flex-row items-center justify-between pb-4">
             <CardTitle className="text-lg font-semibold">
-              Your Internships
+              Your Posted Jobs
             </CardTitle>
             <Button variant="ghost" size="sm" asChild>
               <Link
@@ -232,13 +232,13 @@ export default function CompanyDashboard() {
             {Internships.length === 0 && (
               <div className="text-center py-12">
                 <p className="text-muted-foreground">
-                  No internships posted yet.
+                  No opportunities posted yet.
                 </p>
                 <Button
                   className="mt-4"
                   onClick={() => (window.location.href = "/company/post")}
                 >
-                  Post Your First Internship
+                  Post Your First Internship / Full Time Job
                 </Button>
               </div>
             )}

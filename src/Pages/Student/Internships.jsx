@@ -262,10 +262,10 @@ function EmptyState({ onClear }) {
         <Search className="h-8 w-8 text-muted-foreground" />
       </div>
       <h3 className="font-semibold text-lg text-foreground mb-2">
-        No internships found
+        No opportunities found
       </h3>
       <p className="text-muted-foreground mb-6 max-w-sm mx-auto">
-        We couldn't find any internships matching your filters. Try adjusting
+        We couldn't find any opportunities matching your filters. Try adjusting
         your search criteria.
       </p>
       <Button variant="outline" onClick={onClear}>

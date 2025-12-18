@@ -24,8 +24,8 @@ import CompanyHeader from "./CompanyHeader";
 
 const companyLinks = [
   { to: "/company/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { to: "/company/post", icon: PlusCircle, label: "Post Internship" },
-  { to: "/company/internships", icon: Briefcase, label: "My Internships" },
+  { to: "/company/post", icon: PlusCircle, label: "Post Opportunities" },
+  { to: "/company/internships", icon: Briefcase, label: "Our Posted Jobs" },
   { to: "/company/applicants", icon: Users, label: "Applicants" },
   { to: "/company/profile", icon: Building2, label: "Company Profile" },
 ];

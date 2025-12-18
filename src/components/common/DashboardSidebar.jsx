@@ -18,8 +18,8 @@ import { Logout } from "@/Store/Auth-Slice/authSlice";
 
 const studentLinks = [
   { to: "/student/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { to: "/student/internships", icon: Briefcase, label: "Browse Internships" },
-  { to: "/applications", icon: FileText, label: "My Applications" },
+  { to: "/student/internships", icon: Briefcase, label: "Browse Opportunities" },
+  { to: "/student/applications", icon: FileText, label: "My Applications" },
   { to: "/student/training", icon: GraduationCap, label: "Training" },
   { to: "/interviews", icon: Calendar, label: "Interviews" },
   { to: "/student/profile", icon: User, label: "Profile" },
@@ -27,8 +27,8 @@ const studentLinks = [
 
 const companyLinks = [
   { to: "/company/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { to: "/company/post", icon: PlusCircle, label: "Post Internship" },
-  { to: "/company/internships", icon: Briefcase, label: "My Internships" },
+  { to: "/company/post", icon: PlusCircle, label: "Post Opportunities" },
+  { to: "/company/internships", icon: Briefcase, label: "Our Posted Jobs" },
   { to: "/company/applicants", icon: Users, label: "Applicants" },
   { to: "/company/profile", icon: Building2, label: "Company Profile" },
 ];

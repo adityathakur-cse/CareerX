@@ -62,7 +62,7 @@ const PostIntern = () => {
         navigate("/company/dashboard");
         toast.success(response?.payload?.message);
       } else {
-        toast.error("Couldn't Post Internship. Please try again");
+        toast.error("Couldn't Post. Please try again");
       }
     });
   }
@@ -103,10 +103,10 @@ const PostIntern = () => {
                   <CardTitle className="text-lg flex gap-2">
                     {" "}
                     <Briefcase className="h-7 w-7 text-primary" />
-                    Internship Details
+                    Job Profile Details
                   </CardTitle>
                   <CardDescription>
-                    Basic information about the internship position
+                    Basic information about the position
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -115,7 +115,7 @@ const PostIntern = () => {
                       <div className="space-y-5">
                         <div className="gap-3 flex flex-col">
                           <Label className={"text-black font-[100px]"}>
-                            Internship Title*
+                            Job Title*
                           </Label>
                           <Input
                             name="title"
@@ -132,7 +132,7 @@ const PostIntern = () => {
                             id="description"
                             name="description"
                             onChange={handleInputChange}
-                            placeholder="Describe the internship role, responsibilites, and what the intern will learn..."
+                            placeholder="Describe the role, responsibilites, and what the applicant will learn..."
                           />
                         </div>
                         {/* Skills */}
@@ -210,6 +210,7 @@ const PostIntern = () => {
                           <SelectItem value="4">4 Months</SelectItem>
                           <SelectItem value="5">5 Months</SelectItem>
                           <SelectItem value="6">6 Months</SelectItem>
+                          <SelectItem value="7">Full Time</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>

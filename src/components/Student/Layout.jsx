@@ -25,7 +25,7 @@ import { Logout } from "@/Store/Auth-Slice/authSlice";
 
 const studentLinks = [
   { to: "/student/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { to: "/student/internships", icon: Briefcase, label: "Browse Internships" },
+  { to: "/student/internships", icon: Briefcase, label: "Browse Opportunities" },
   { to: "/applications", icon: FileText, label: "My Applications" },
   { to: "/student/training", icon: GraduationCap, label: "Training" },
   { to: "/interviews", icon: Calendar, label: "Interviews" },

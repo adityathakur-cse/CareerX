@@ -59,13 +59,14 @@ export default function Profile() {
   const { user } = useSelector((state) => state.auth);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(user);
+  const [isLoading, setIsLoading] = useState(false);
   const [newSkill, setNewSkill] = useState("");
   const [fileLoad, setFileLoad] = useState(false);
   const [imageLoad, setImageLoad] = useState(false);
   const resumeInputRef = useRef(null);
   const imageInputRef = useRef(null);
   const dispatch = useDispatch();
-  const { isLoading } = useSelector((state) => state.student);
+  // const { isLoading } = useSelector((state) => state.student);
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -162,13 +163,16 @@ export default function Profile() {
   };
 
   const handleSave = () => {
+    setIsLoading(true);
     dispatch(profileUpdate(formData)).then((response) => {
       console.log(response);
       if (response?.payload?.success) {
         toast.success("Profile updated successfully!");
         setIsEditing(false);
+        setIsLoading(false);
       } else {
         toast.error("Some error occurred");
+        setIsLoading(false);
       }
     });
   };

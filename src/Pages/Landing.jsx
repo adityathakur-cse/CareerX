@@ -16,9 +16,9 @@ import { Navbar } from "@/components/common/Navbar";
 const features = [
   {
     icon: Briefcase,
-    title: "Discover Internships",
+    title: "Discover Opportunities",
     description:
-      "Browse thousands of internship opportunities from top companies across industries.",
+      "Browse thousands of internship and full time opportunities from top companies across industries.",
   },
   {
     icon: GraduationCap,
@@ -36,14 +36,14 @@ const features = [
     icon: Award,
     title: "Get Hired",
     description:
-      "Connect with companies actively looking for talented interns like you.",
+      "Connect with companies actively looking for talented individuals like you.",
   },
 ];
 
 const stats = [
-  { value: "10,000+", label: "Active Internships" },
-  { value: "5,000+", label: "Companies" },
-  { value: "50,000+", label: "Students Placed" },
+  { value: "100+", label: "Active Opportunities" },
+  { value: "50+", label: "Companies" },
+  { value: "500+", label: "Students Placed" },
 ];
 
 const Landing = () => {
@@ -56,12 +56,12 @@ const Landing = () => {
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight">
               Launch Your Career with the
-              <span className="text-primary"> Right Internship</span>
+              <span className="text-primary"> Right Placement Opportunity</span>
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
               Connect with top companies, build real-world experience, and take
               the first step towards your dream career. Join thousands of
-              students already using InternHub.
+              students already using CareerX.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button size="lg" asChild>
@@ -147,13 +147,13 @@ const Landing = () => {
                 Find the best talent for your team
               </h2>
               <p className="text-muted-foreground mb-8">
-                Post internship opportunities and connect with motivated
+                Post job opportunities and connect with motivated
                 students from top universities. Our platform makes it easy to
-                manage applications and find the perfect candidates.
+                manage applications and find perfect candidates.
               </p>
               <ul className="space-y-4 mb-8">
                 {[
-                  "Post unlimited internships",
+                  "Post unlimited opportunities",
                   "Advanced candidate filtering",
                   "Built-in interview scheduling",
                   "Track application pipeline",
@@ -191,7 +191,7 @@ const Landing = () => {
               Ready to start your journey?
             </h2>
             <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
-              Join thousands of students and companies already using InternHub
+              Join thousands of students and companies already using CareerX
               to build meaningful connections.
             </p>
             <Button size="lg" variant="secondary" asChild>
@@ -241,7 +241,7 @@ const Landing = () => {
               </Link>
             </div>
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} InternHub. All rights reserved.
+              © {new Date().getFullYear()} CareerX. All rights reserved.
             </p>
           </div>
         </div>

@@ -23,6 +23,7 @@ import CompanyProfile from "./Pages/Company/CompanyProfile";
 import CompanyLayout from "./components/Company/Layout";
 import { setProfile } from "./Store/Company-Slice/companySlice";
 import { setStudent } from "./Store/Student-Slice/studentSlice";
+import Applications from "./Pages/Student/Applications";
 
 function App() {
   const { isAuthenticated, user, isLoading } = useSelector(
@@ -74,6 +75,7 @@ function App() {
           <Route element={<Internships />} path="internships" />
           <Route element={<Profile />} path="profile" />
           <Route element={<Training />} path="training" />
+          <Route element={<Applications />} path="applications" />
         </Route>
         <Route
           path="/company"

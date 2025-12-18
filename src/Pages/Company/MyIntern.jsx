@@ -87,17 +87,17 @@ const MyIntern = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-foreground">
-            My Internships
+            My Posted Jobs
           </h1>
           <p className="text-muted-foreground mt-1">
-            Manage all your posted internships
+            Manage all your posted jobs
           </p>
         </div>
         <Button
           className={"cursor-pointer"}
           onClick={() => navigate("/company/post")}
         >
-          Post New Internship
+          Post New Opportunities
         </Button>
       </div>
 
@@ -108,7 +108,7 @@ const MyIntern = () => {
             <div className="text-2xl font-bold text-foreground">
               {Internships.length}
             </div>
-            <p className="text-sm text-muted-foreground">Total Internships</p>
+            <p className="text-sm text-muted-foreground">Total Openings</p>
           </CardContent>
         </Card>
         <Card>
@@ -116,7 +116,7 @@ const MyIntern = () => {
             <div className="text-2xl font-bold text-foreground">
               {Internships.filter((i) => i.isActive === true).length}
             </div>
-            <p className="text-sm text-muted-foreground">Active Internships</p>
+            <p className="text-sm text-muted-foreground">Active Jobs</p>
           </CardContent>
         </Card>
         <Card>
@@ -132,7 +132,7 @@ const MyIntern = () => {
       {/* Internships Table */}
       <Card>
         <CardHeader>
-          <CardTitle>All Internships</CardTitle>
+          <CardTitle>All Openings</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
@@ -214,13 +214,13 @@ const MyIntern = () => {
           {Internships.length === 0 && (
             <div className="text-center py-12">
               <p className="text-muted-foreground">
-                No internships posted yet.
+                No opportunities posted yet.
               </p>
               <Button
                 className="mt-4"
                 onClick={() => (window.location.href = "/company/post")}
               >
-                Post Your First Internship
+                Post a job
               </Button>
             </div>
           )}
@@ -231,10 +231,10 @@ const MyIntern = () => {
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Internship</DialogTitle>
+            <DialogTitle>Delete</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this internship? This action
-              cannot be undone. All applications for this internship will also
+              Are you sure you want to delete ? This action
+              cannot be undone. All applications for this profile will also
               be removed.
             </DialogDescription>
           </DialogHeader>

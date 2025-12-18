@@ -13,8 +13,8 @@ import {
 
 const pageHeadings = {
   "/company/dashboard": "Dashboard",
-  "/company/post": "Post Internship",
-  "/company/internships": "My Internships",
+  "/company/post": "Post Opportunities",
+  "/company/internships": "Our Posted Jobs",
   "/company/applicants": "Applicants",
   "/company/profile": "Company Profile",
 };
@@ -64,7 +64,7 @@ const CompanyHeader = ({ setOpenSidebar }) => {
 
                   <div className="flex-1">
                     <p className="text-sm font-medium text-foreground">
-                      New internship available
+                      New opportunity available
                     </p>
                     <p className="text-xs text-muted-foreground">
                       A new role matching your skills was posted.

@@ -13,7 +13,7 @@ import {
 
 const pageHeadings = {
   "/student/dashboard": "Dashboard",
-  "/student/internships": "Browse Internships",
+  "/student/internships": "Browse Opportunities",
   "/applications": "My Applications",
   "/student/training": "Training",
   "/interviews": "Interviews",
